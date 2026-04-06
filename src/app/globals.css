@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-gold: #8B6F4E;
+  --color-gold-light: #C4A882;
+  --color-gold-pale: #F0E8DC;
+  --color-cream: #FAF7F2;
+  --color-warm-white: #FFFDF9;
+  --color-border: #E8DDD0;
+  --color-ink: #2D2417;
+  --color-ink-mid: #5A4A37;
+  --color-ink-muted: #9A8B7A;
+  --color-teal: #4A9FA5;
+  --color-teal-light: #E6F4F5;
+  --font-serif: var(--font-playfair);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #1a1209;
+  color: #2D2417;
+  font-family: var(--font-geist-sans, system-ui, -apple-system, sans-serif);
+  min-height: 100vh;
 }
+
+/* Scrollbar hide */
+.no-scroll::-webkit-scrollbar { display: none; }
+.no-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Warm venue image patterns */
+.vp-1 { background: linear-gradient(135deg, #D4A373 0%, #8B6F4E 100%); }
+.vp-2 { background: linear-gradient(135deg, #C9B18A 0%, #8B7355 100%); }
+.vp-3 { background: linear-gradient(135deg, #B5938F 0%, #7D5A55 100%); }
+.vp-4 { background: linear-gradient(135deg, #A8BDB5 0%, #6A9A8E 100%); }
+.vp-5 { background: linear-gradient(135deg, #C4B5A5 0%, #9A8470 100%); }
+.vp-6 { background: linear-gradient(135deg, #D6C5B5 0%, #B09080 100%); }
+.vp-7 { background: linear-gradient(135deg, #BCA99A 0%, #8C6A5E 100%); }
+.vp-8 { background: linear-gradient(135deg, #D2C0AE 0%, #A88B77 100%); }
+.vp-9 { background: linear-gradient(135deg, #CBB89A 0%, #9A7B5A 100%); }
+.vp-10 { background: linear-gradient(135deg, #C5AFA0 0%, #957A72 100%); }
+
+/* Avatar patterns */
+.av-1 { background: linear-gradient(135deg, #E8C5A0 0%, #C4956A 100%); }
+.av-2 { background: linear-gradient(135deg, #B5C9C5 0%, #7A9E9A 100%); }
+.av-3 { background: linear-gradient(135deg, #D4B5C0 0%, #A87C8C 100%); }
+.av-4 { background: linear-gradient(135deg, #C5C0A8 0%, #9A956A 100%); }
+.av-5 { background: linear-gradient(135deg, #B8C5D0 0%, #7A95AA 100%); }
+
+/* Score ring animation */
+@keyframes scoreRingDraw {
+  from { stroke-dashoffset: 157; }
+}
+.score-ring {
+  animation: scoreRingDraw 1s ease-out forwards;
+}
+
+/* Slide in from right */
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+.slide-in-right {
+  animation: slideInRight 0.28s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
+@keyframes slideOutRight {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
+}
+.slide-out-right {
+  animation: slideOutRight 0.24s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
+/* Fade in */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.fade-in { animation: fadeIn 0.2s ease forwards; }
