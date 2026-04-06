@@ -62,6 +62,7 @@ export default function Home() {
           <MenuDrawer
             open={drawerOpen}
             onClose={() => setDrawerOpen(false)}
+            onNavigate={(tab) => { setActiveTab(tab); setDrawerOpen(false); }}
           />
         </div>
       </div>
