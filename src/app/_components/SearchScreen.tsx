@@ -26,6 +26,13 @@ const MEMBERS = [
 
 export default function SearchScreen() {
   const [query, setQuery] = useState("");
+  const [activeType, setActiveType] = useState<string | null>(null);
+  const [recentSearches, setRecentSearches] = useState(RECENT_SEARCHES);
+  const [followed, setFollowed] = useState<Set<string>>(new Set());
+
+  function toggleFollow(handle: string) {
+    setFollowed(prev => { const n = new Set(prev); n.has(handle) ? n.delete(handle) : n.add(handle); return n; });
+  }
 
   return (
     <div className="h-full overflow-y-auto no-scroll" style={{ background: "#FAF7F2" }}>
@@ -72,8 +79,11 @@ export default function SearchScreen() {
             {VENUE_TYPES.map((type) => (
               <button
                 key={type}
-                className="px-3.5 py-1.5 rounded-full text-xs font-medium"
-                style={{ border: "1px solid #E8DDD0", background: "#FFFDF9", color: "#5A4A37" }}
+                onClick={() => setActiveType(activeType === type ? null : type)}
+                className="px-3.5 py-1.5 rounded-full text-xs font-medium transition-all"
+                style={activeType === type
+                  ? { background: "#8B6F4E", color: "#FFFDF9", border: "1px solid #8B6F4E" }
+                  : { border: "1px solid #E8DDD0", background: "#FFFDF9", color: "#5A4A37" }}
               >
                 {type}
               </button>
@@ -87,25 +97,36 @@ export default function SearchScreen() {
             <h2 className="text-sm font-semibold" style={{ color: "#2D2417" }}>
               Recent Searches
             </h2>
-            <button className="text-xs" style={{ color: "#8B6F4E" }}>
-              Clear
-            </button>
-          </div>
-          <div className="space-y-1">
-            {RECENT_SEARCHES.map((s) => (
+            {recentSearches.length > 0 && (
               <button
-                key={s}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left"
-                style={{ background: "#FFFDF9", border: "1px solid #F0E8DC" }}
+                onClick={() => setRecentSearches([])}
+                className="text-xs"
+                style={{ color: "#8B6F4E" }}
               >
-                <SearchIcon size={14} style={{ color: "#9A8B7A" } as React.CSSProperties} />
-                <span className="text-sm flex-1" style={{ color: "#5A4A37" }}>
-                  {s}
-                </span>
-                <ChevronRightIcon size={14} style={{ color: "#C4A882" } as React.CSSProperties} />
+                Clear
               </button>
-            ))}
+            )}
           </div>
+          {recentSearches.length === 0 ? (
+            <p className="text-xs py-2" style={{ color: "#9A8B7A" }}>No recent searches</p>
+          ) : (
+            <div className="space-y-1">
+              {recentSearches.map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setQuery(s)}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left"
+                  style={{ background: "#FFFDF9", border: "1px solid #F0E8DC" }}
+                >
+                  <SearchIcon size={14} style={{ color: "#9A8B7A" } as React.CSSProperties} />
+                  <span className="text-sm flex-1" style={{ color: "#5A4A37" }}>
+                    {s}
+                  </span>
+                  <ChevronRightIcon size={14} style={{ color: "#C4A882" } as React.CSSProperties} />
+                </button>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Trending venues */}
@@ -190,10 +211,13 @@ export default function SearchScreen() {
                   </p>
                 </div>
                 <button
-                  className="px-3 py-1.5 rounded-full text-xs font-semibold"
-                  style={{ background: "#8B6F4E", color: "#FFFDF9" }}
+                  onClick={() => toggleFollow(m.handle)}
+                  className="px-3 py-1.5 rounded-full text-xs font-semibold transition-all"
+                  style={followed.has(m.handle)
+                    ? { background: "#F0E8DC", color: "#8B6F4E", border: "1px solid #C4A882" }
+                    : { background: "#8B6F4E", color: "#FFFDF9" }}
                 >
-                  Follow
+                  {followed.has(m.handle) ? "Following ✓" : "Follow"}
                 </button>
               </div>
             ))}

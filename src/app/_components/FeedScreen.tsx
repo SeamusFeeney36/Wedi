@@ -5,6 +5,7 @@ import { CalendarIcon, BellIcon, MenuIcon, SearchIcon, SparkleIcon, LockIcon, Ch
 
 interface FeedScreenProps {
   onOpenDrawer: () => void;
+  onNavigateToSearch: () => void;
 }
 
 const QUICK_FILTERS = ["Book tour", "Venues Nearby", "Trending"];
@@ -131,9 +132,20 @@ function ActionBadge({ action }: { action: string }) {
   );
 }
 
-export default function FeedScreen({ onOpenDrawer }: FeedScreenProps) {
+export default function FeedScreen({ onOpenDrawer, onNavigateToSearch }: FeedScreenProps) {
   const [activeFilter, setActiveFilter] = useState("Book tour");
   const [friendsInvited] = useState(0);
+  const [likedItems, setLikedItems] = useState<Set<number>>(new Set());
+  const [savedItems, setSavedItems] = useState<Set<number>>(new Set());
+  const [bellActive, setBellActive] = useState(false);
+  const [calActive, setCalActive] = useState(false);
+
+  function toggleLike(id: number) {
+    setLikedItems(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
+  }
+  function toggleSave(id: number) {
+    setSavedItems(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
+  }
 
   return (
     <div
@@ -149,18 +161,25 @@ export default function FeedScreen({ onOpenDrawer }: FeedScreenProps) {
           className="text-2xl font-bold italic tracking-tight"
           style={{ fontFamily: "var(--font-playfair)", color: "#2D2417" }}
         >
-          vœux
+          Wedi
         </span>
         <div className="flex items-center gap-3" style={{ color: "#5A4A37" }}>
-          <button className="p-1.5 rounded-full hover:bg-gold-pale transition-colors">
-            <CalendarIcon size={20} />
+          <button
+            className="p-1.5 rounded-full transition-colors"
+            style={{ background: calActive ? "#F0E8DC" : "transparent" }}
+            onClick={() => setCalActive(v => !v)}
+          >
+            <CalendarIcon size={20} style={{ color: calActive ? "#8B6F4E" : undefined }} />
           </button>
-          <button className="p-1.5 rounded-full hover:bg-gold-pale transition-colors relative">
-            <BellIcon size={20} />
-            <span
-              className="absolute top-1 right-1 w-2 h-2 rounded-full"
-              style={{ background: "#C4A882" }}
-            />
+          <button
+            className="p-1.5 rounded-full transition-colors relative"
+            style={{ background: bellActive ? "#F0E8DC" : "transparent" }}
+            onClick={() => setBellActive(v => !v)}
+          >
+            <BellIcon size={20} style={{ color: bellActive ? "#8B6F4E" : undefined }} />
+            {!bellActive && (
+              <span className="absolute top-1 right-1 w-2 h-2 rounded-full" style={{ background: "#C4A882" }} />
+            )}
           </button>
           <button
             className="p-1.5 rounded-full hover:bg-gold-pale transition-colors"
@@ -172,16 +191,17 @@ export default function FeedScreen({ onOpenDrawer }: FeedScreenProps) {
       </div>
 
       <div className="px-4 py-3 space-y-5">
-        {/* Search bar */}
-        <div
-          className="flex items-center gap-2.5 px-4 py-3 rounded-full"
+        {/* Search bar — tapping navigates to Search tab */}
+        <button
+          onClick={onNavigateToSearch}
+          className="w-full flex items-center gap-2.5 px-4 py-3 rounded-full text-left"
           style={{ background: "#FFFDF9", border: "1px solid #E8DDD0" }}
         >
-          <SearchIcon size={17} className="shrink-0" style={{ color: "#9A8B7A" } as React.CSSProperties} />
+          <SearchIcon size={17} className="shrink-0" style={{ color: "#9A8B7A" }} />
           <span className="text-sm" style={{ color: "#9A8B7A" }}>
             Search a venue, member, etc.
           </span>
-        </div>
+        </button>
 
         {/* Quick filter pills */}
         <div className="flex gap-2 overflow-x-auto no-scroll pb-1">
@@ -457,13 +477,21 @@ export default function FeedScreen({ onOpenDrawer }: FeedScreenProps) {
                   className="flex items-center gap-4 px-3.5 py-2"
                   style={{ borderTop: "1px solid #F0E8DC" }}
                 >
-                  <button className="flex items-center gap-1.5 text-[11px] font-medium" style={{ color: "#9A8B7A" }}>
+                  <button
+                    onClick={() => toggleLike(item.id)}
+                    className="flex items-center gap-1.5 text-[11px] font-medium transition-colors"
+                    style={{ color: likedItems.has(item.id) ? "#C44B4B" : "#9A8B7A" }}
+                  >
                     <HeartIcon size={14} />
-                    Like
+                    {likedItems.has(item.id) ? "Liked" : "Like"}
                   </button>
-                  <button className="flex items-center gap-1.5 text-[11px] font-medium" style={{ color: "#9A8B7A" }}>
+                  <button
+                    onClick={() => toggleSave(item.id)}
+                    className="flex items-center gap-1.5 text-[11px] font-medium transition-colors"
+                    style={{ color: savedItems.has(item.id) ? "#8B6F4E" : "#9A8B7A" }}
+                  >
                     <StarIcon size={14} />
-                    Save venue
+                    {savedItems.has(item.id) ? "Saved ✓" : "Save venue"}
                   </button>
                 </div>
               </div>

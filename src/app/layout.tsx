@@ -16,7 +16,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "vœux",
+  title: "Wedi",
   description: "Discover and rank wedding venues",
 };
 

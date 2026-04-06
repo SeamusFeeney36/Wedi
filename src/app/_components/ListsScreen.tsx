@@ -119,6 +119,11 @@ function ScoreBadge({ score }: { score: number }) {
 
 function TouredList() {
   const [view, setView] = useState<"list" | "map">("list");
+  const [activeFilters, setActiveFilters] = useState<Set<string>>(new Set());
+
+  function toggleFilter(f: string) {
+    setActiveFilters(prev => { const n = new Set(prev); n.has(f) ? n.delete(f) : n.add(f); return n; });
+  }
 
   return (
     <>
@@ -126,15 +131,19 @@ function TouredList() {
       <div className="flex items-center gap-2 px-4 py-3 overflow-x-auto no-scroll">
         <button
           className="shrink-0 p-2 rounded-full"
-          style={{ border: "1px solid #E8DDD0", background: "#FFFDF9", color: "#5A4A37" }}
+          style={{ border: "1px solid #E8DDD0", background: activeFilters.size > 0 ? "#8B6F4E" : "#FFFDF9", color: activeFilters.size > 0 ? "#FFFDF9" : "#5A4A37" }}
+          onClick={() => setActiveFilters(new Set())}
         >
           <FilterIcon size={15} />
         </button>
         {FILTER_PILLS.map((p) => (
           <button
             key={p}
-            className="shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium"
-            style={{ border: "1px solid #E8DDD0", background: "#FFFDF9", color: "#5A4A37" }}
+            onClick={() => toggleFilter(p)}
+            className="shrink-0 px-3.5 py-1.5 rounded-full text-xs font-medium transition-all"
+            style={activeFilters.has(p)
+              ? { background: "#8B6F4E", color: "#FFFDF9", border: "1px solid #8B6F4E" }
+              : { border: "1px solid #E8DDD0", background: "#FFFDF9", color: "#5A4A37" }}
           >
             {p}
           </button>
@@ -320,24 +329,38 @@ function WantList() {
   );
 }
 
+const CITIES = ["New York, NY", "Brooklyn, NY", "Los Angeles, CA", "Chicago, IL"];
+const MONTHS = ["Mar 2026", "Apr 2026", "May 2026", "Jun 2026"];
+
 function RecsList() {
+  const [guestSize, setGuestSize] = useState<number | string>(100);
+  const [cityIdx, setCityIdx] = useState(0);
+  const [monthIdx, setMonthIdx] = useState(1);
+  const [bookedSlots, setBookedSlots] = useState<Set<string>>(new Set());
+
+  function toggleBooking(key: string) {
+    setBookedSlots(prev => { const n = new Set(prev); n.has(key) ? n.delete(key) : n.add(key); return n; });
+  }
+
   return (
     <div className="px-4 py-3 space-y-3 pb-4">
       {/* Location + date filter */}
       <div className="flex gap-2">
         <button
-          className="flex-1 flex items-center gap-2 px-3 py-2 rounded-full text-xs font-medium"
-          style={{ border: "1px solid #E8DDD0", background: "#FFFDF9", color: "#5A4A37" }}
+          onClick={() => setCityIdx(i => (i + 1) % CITIES.length)}
+          className="flex-1 flex items-center gap-2 px-3 py-2 rounded-full text-xs font-medium transition-colors"
+          style={{ border: "1px solid #C4A882", background: "#F0E8DC", color: "#5A4A37" }}
         >
           <MapPinIcon size={13} />
-          New York, NY
+          {CITIES[cityIdx]}
           <ChevronRightIcon size={13} className="ml-auto rotate-90" />
         </button>
         <button
-          className="flex-1 flex items-center gap-2 px-3 py-2 rounded-full text-xs font-medium"
-          style={{ border: "1px solid #E8DDD0", background: "#FFFDF9", color: "#5A4A37" }}
+          onClick={() => setMonthIdx(i => (i + 1) % MONTHS.length)}
+          className="flex-1 flex items-center gap-2 px-3 py-2 rounded-full text-xs font-medium transition-colors"
+          style={{ border: "1px solid #C4A882", background: "#F0E8DC", color: "#5A4A37" }}
         >
-          🗓 Apr 2026
+          🗓 {MONTHS[monthIdx]}
           <ChevronRightIcon size={13} className="ml-auto rotate-90" />
         </button>
       </div>
@@ -348,9 +371,10 @@ function RecsList() {
         {[50, 100, 150, 200, "200+"].map((n) => (
           <button
             key={n}
-            className="px-2.5 py-1 rounded-full text-xs font-medium"
+            onClick={() => setGuestSize(n)}
+            className="px-2.5 py-1 rounded-full text-xs font-medium transition-all"
             style={
-              n === 100
+              guestSize === n
                 ? { background: "#8B6F4E", color: "#FFFDF9" }
                 : { border: "1px solid #E8DDD0", background: "#FFFDF9", color: "#5A4A37" }
             }
@@ -414,21 +438,26 @@ function RecsList() {
           </div>
 
           {/* Tour slots */}
-          <div
-            className="flex items-center gap-2 px-3 pb-3 flex-wrap"
-          >
-            {venue.slots.map((slot) => (
-              <button
-                key={slot}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold"
-                style={{ background: "#4A9FA5", color: "#FFFDF9" }}
-              >
-                <span className="w-3.5 h-3.5 rounded-sm bg-white/20 inline-flex items-center justify-center text-[8px]">
-                  ⌚
-                </span>
-                {slot}
-              </button>
-            ))}
+          <div className="flex items-center gap-2 px-3 pb-3 flex-wrap">
+            {venue.slots.map((slot) => {
+              const key = `${venue.id}-${slot}`;
+              const booked = bookedSlots.has(key);
+              return (
+                <button
+                  key={slot}
+                  onClick={() => toggleBooking(key)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all"
+                  style={booked
+                    ? { background: "#8B6F4E", color: "#FFFDF9" }
+                    : { background: "#4A9FA5", color: "#FFFDF9" }}
+                >
+                  <span className="w-3.5 h-3.5 rounded-sm bg-white/20 inline-flex items-center justify-center text-[8px]">
+                    {booked ? "✓" : "⌚"}
+                  </span>
+                  {booked ? "Booked!" : slot}
+                </button>
+              );
+            })}
           </div>
         </div>
       ))}
@@ -438,9 +467,9 @@ function RecsList() {
 
 function GuidesList() {
   const guides = [
-    { title: "The Complete NYC Venue Guide 2026", author: "vœux Editors", venues: 45, cover: "vp-1" },
+    { title: "The Complete NYC Venue Guide 2026", author: "Wedi Editors", venues: 45, cover: "vp-1" },
     { title: "Barn & Rustic Wedding Venues", author: "Sophie L.", venues: 28, cover: "vp-3" },
-    { title: "Waterfront Ceremonies in the NE", author: "vœux Editors", venues: 19, cover: "vp-4" },
+    { title: "Waterfront Ceremonies in the NE", author: "Wedi Editors", venues: 19, cover: "vp-4" },
   ];
   return (
     <div className="px-4 py-3 space-y-3 pb-4">

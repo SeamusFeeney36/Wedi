@@ -41,7 +41,10 @@ export default function Home() {
             {/* Tab screens */}
             <div className="absolute inset-0" style={{ bottom: "88px" }}>
               {activeTab === "feed" && (
-                <FeedScreen onOpenDrawer={() => setDrawerOpen(true)} />
+                <FeedScreen
+                  onOpenDrawer={() => setDrawerOpen(true)}
+                  onNavigateToSearch={() => setActiveTab("search")}
+                />
               )}
               {activeTab === "lists" && <ListsScreen />}
               {activeTab === "search" && <SearchScreen />}

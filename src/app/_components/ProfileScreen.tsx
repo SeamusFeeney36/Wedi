@@ -108,7 +108,7 @@ export default function ProfileScreen() {
           <LockIcon size={16} style={{ color: "#C4A882" } as React.CSSProperties} />
           <div>
             <p className="text-xs font-semibold" style={{ color: "#2D2417" }}>
-              vœux Rank: <span style={{ color: "#C4A882" }}>Locked</span>
+              Wedi Rank: <span style={{ color: "#C4A882" }}>Locked</span>
             </p>
             <p className="text-[10px]" style={{ color: "#9A8B7A" }}>
               Tour 10 venues to unlock your rank

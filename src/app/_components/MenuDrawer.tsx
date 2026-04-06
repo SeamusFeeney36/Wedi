@@ -129,7 +129,7 @@ export default function MenuDrawer({ open, onClose }: MenuDrawerProps) {
             className="text-2xl font-bold italic"
             style={{ fontFamily: "var(--font-playfair)", color: "#8B6F4E" }}
           >
-            vœux
+            Wedi
           </span>
           <p className="text-[11px] mt-0.5" style={{ color: "#9A8B7A" }}>
             Wedding venue discovery & ranking
@@ -190,7 +190,7 @@ export default function MenuDrawer({ open, onClose }: MenuDrawerProps) {
         {/* Footer */}
         <div className="px-5 py-4 mt-2" style={{ borderTop: "1px solid #E8DDD0" }}>
           <p className="text-[10px]" style={{ color: "#C4A882" }}>
-            vœux v1.0.0 · Made with love for weddings
+            Wedi v1.0.0 · Made with love for weddings
           </p>
         </div>
       </div>
