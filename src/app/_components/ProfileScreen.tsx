@@ -6,9 +6,7 @@ import { FireIcon, TargetIcon, MapPinIcon, ChevronRightIcon, LockIcon } from "./
 const TOURED_VENUES = [
   { name: "Liberty Warehouse", score: 9.6, pattern: "vp-5" },
   { name: "The Foundry", score: 9.2, pattern: "vp-1" },
-  { name: "Blue Hill at Stone Barns", score: 9.0, pattern: "vp-2" },
   { name: "Prospect Park Boathouse", score: 8.7, pattern: "vp-4" },
-  { name: "The Wythe Hotel", score: 8.4, pattern: "vp-8" },
 ];
 
 const WANT_VENUES = [
@@ -18,8 +16,8 @@ const WANT_VENUES = [
 ];
 
 export default function ProfileScreen() {
-  const [goalVenues, setGoalVenues] = useState(12);
-  const touredCount = 5;
+  const [goalVenues, setGoalVenues] = useState(5);
+  const touredCount = 3;
   const streakDays = 4;
   const goalProgress = touredCount / goalVenues;
 
@@ -65,7 +63,7 @@ export default function ProfileScreen() {
         <div className="flex items-center gap-5 mb-4">
           <div className="text-center">
             <p className="text-base font-bold" style={{ color: "#2D2417" }}>
-              5
+              3
             </p>
             <p className="text-[11px]" style={{ color: "#9A8B7A" }}>
               Toured
@@ -111,14 +109,14 @@ export default function ProfileScreen() {
               Wedi Rank: <span style={{ color: "#C4A882" }}>Locked</span>
             </p>
             <p className="text-[10px]" style={{ color: "#9A8B7A" }}>
-              Tour 10 venues to unlock your rank
+              Tour 5 venues to unlock your rank
             </p>
           </div>
           <div
             className="ml-auto px-2.5 py-1 rounded-full text-[10px] font-semibold"
             style={{ background: "#F0E8DC", color: "#8B6F4E" }}
           >
-            5/10
+            3/5
           </div>
         </div>
       </div>
@@ -166,7 +164,7 @@ export default function ProfileScreen() {
             How many venues do you want to tour in 2026?
           </p>
           <div className="flex items-center gap-2 mb-3">
-            {[6, 10, 12, 15, 20].map((n) => (
+            {[3, 4, 5, 6, 8].map((n) => (
               <button
                 key={n}
                 onClick={() => setGoalVenues(n)}

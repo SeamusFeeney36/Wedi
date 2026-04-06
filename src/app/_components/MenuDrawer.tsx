@@ -91,7 +91,7 @@ export default function MenuDrawer({ open, onClose, onNavigate }: MenuDrawerProp
     { icon: <SettingsIcon size={18} />, label: "Settings", chevron: true },
     { icon: <CalendarIcon size={18} />, label: "Your Tours", chevron: true },
     { icon: <LockIcon size={18} />, label: "Your Subscriptions", chevron: true },
-    { icon: <TargetIcon size={18} />, label: "Your Venue Goal", badge: "5/12", chevron: true, divider: true },
+    { icon: <TargetIcon size={18} />, label: "Your Venue Goal", badge: "3/5", chevron: true, divider: true },
 
     { icon: <GlobeIcon size={18} />, label: "Home City", badge: CITIES[cityIdx], chevron: true },
     {
