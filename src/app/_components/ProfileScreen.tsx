@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FireIcon, TargetIcon, MapPinIcon, ChevronRightIcon, LockIcon } from "./icons";
+import { FireIcon, MapPinIcon, LockIcon } from "./icons";
 
 const TOURED_VENUES = [
   { name: "Liberty Warehouse", score: 9.6, pattern: "vp-5" },
@@ -16,10 +16,8 @@ const WANT_VENUES = [
 ];
 
 export default function ProfileScreen() {
-  const [goalVenues, setGoalVenues] = useState(5);
   const touredCount = 3;
   const streakDays = 4;
-  const goalProgress = touredCount / goalVenues;
 
   return (
     <div className="h-full overflow-y-auto no-scroll" style={{ background: "#FAF7F2" }}>
@@ -150,56 +148,6 @@ export default function ProfileScreen() {
         </div>
 
         {/* Annual goal */}
-        <div
-          className="p-4 rounded-2xl"
-          style={{ background: "#FFFDF9", border: "1px solid #E8DDD0" }}
-        >
-          <div className="flex items-center gap-2 mb-3">
-            <TargetIcon size={18} style={{ color: "#8B6F4E" } as React.CSSProperties} />
-            <p className="text-sm font-semibold" style={{ color: "#2D2417" }}>
-              2026 Venue Goal
-            </p>
-          </div>
-          <p className="text-[12px] mb-3" style={{ color: "#9A8B7A" }}>
-            How many venues do you want to tour in 2026?
-          </p>
-          <div className="flex items-center gap-2 mb-3">
-            {[3, 4, 5, 6, 8].map((n) => (
-              <button
-                key={n}
-                onClick={() => setGoalVenues(n)}
-                className="px-2.5 py-1.5 rounded-full text-xs font-semibold"
-                style={
-                  goalVenues === n
-                    ? { background: "#8B6F4E", color: "#FFFDF9" }
-                    : { border: "1px solid #E8DDD0", background: "#FAF7F2", color: "#5A4A37" }
-                }
-              >
-                {n}
-              </button>
-            ))}
-          </div>
-          <div className="space-y-1.5">
-            <div className="flex justify-between text-xs">
-              <span style={{ color: "#9A8B7A" }}>
-                {touredCount} of {goalVenues} toured
-              </span>
-              <span style={{ color: "#8B6F4E", fontWeight: 600 }}>
-                {Math.round(goalProgress * 100)}%
-              </span>
-            </div>
-            <div
-              className="h-2 rounded-full overflow-hidden"
-              style={{ background: "#F0E8DC" }}
-            >
-              <div
-                className="h-full rounded-full transition-all"
-                style={{ width: `${Math.min(goalProgress * 100, 100)}%`, background: "#8B6F4E" }}
-              />
-            </div>
-          </div>
-        </div>
-
         {/* Toured venues */}
         <section>
           <div className="flex items-center justify-between mb-2.5">
